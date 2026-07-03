@@ -62,6 +62,10 @@ Route::post('voice/interpret', [\App\Http\Controllers\VoiceController::class, 'i
 // Luma NO provee firma HMAC — ver LumaWebhookController para detalles
 Route::post('webhooks/luma', [LumaWebhookController::class, 'handle']);
 
+// Puente de integración ERP → RentUs (público, protegido por X-Bridge-Token)
+Route::post('integration/inscribe-inmobiliaria', [\App\Http\Controllers\RentUsBridgeController::class, 'inscribirInmobiliaria']);
+Route::post('integration/sync-password', [\App\Http\Controllers\RentUsBridgeController::class, 'syncPassword']);
+
 /*
 |--------------------------------------------------------------------------
 | Autenticación (con throttle)
