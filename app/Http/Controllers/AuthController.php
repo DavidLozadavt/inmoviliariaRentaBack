@@ -19,6 +19,32 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
+    /**
+     * Propaga el nuevo hash de contraseña a nexiservice y School cuando el
+     * usuario la cambia en RentUs. Fire-and-forget: si un destino falla, no
+     * rompe el cambio de contraseña local.
+     */
+    private function syncPasswordToSiblings(string $email, string $hash): void
+    {
+        $bridgeToken = env('BRIDGE_SECRET_TOKEN', 'VirtualT_Bridge_Secret_2026');
+        $targets = [
+            env('NEXI_API_URL', 'http://localhost:8001') . '/api/integration/sync-password',
+            env('SCHOOL_API_URL', 'http://localhost:8000') . '/api/integration/sync-password',
+        ];
+
+        foreach ($targets as $url) {
+            try {
+                (new \GuzzleHttp\Client())->post($url, [
+                    'headers' => ['X-Bridge-Token' => $bridgeToken, 'Accept' => 'application/json'],
+                    'json' => ['email' => $email, 'contrasena_hash' => $hash],
+                    'timeout' => 5,
+                ]);
+            } catch (\Exception $e) {
+                Log::error("Error sincronizando contraseña hacia {$url}: " . $e->getMessage());
+            }
+        }
+    }
+
     public function __construct(
         protected VerificationCodeService $verificationService,
         protected MailService $mailService,
@@ -354,6 +380,8 @@ class AuthController extends Controller
                 $verificationCode->markAsUsed();
             });
 
+            $this->syncPasswordToSiblings($user->email, $user->password);
+
             $this->mailService->sendPasswordChangedNotification($user);
 
             return response()->json([
@@ -404,6 +432,8 @@ class AuthController extends Controller
             $user->update([
                 'password' => $request->new_password, // Cast 'hashed' handles it
             ]);
+
+            $this->syncPasswordToSiblings($user->email, $user->password);
 
             $this->mailService->sendPasswordChangedNotification($user);
 
