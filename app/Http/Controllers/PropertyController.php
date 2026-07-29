@@ -127,6 +127,10 @@ class PropertyController extends Controller
                        ->orWhere('address',     'like', "%{$s}%")
                 );
             })
+            ->when($request->filled('email'), function ($q) use ($request) {
+                $email = $request->input('email');
+                $q->whereHas('user', fn ($q2) => $q2->where('email', $email));
+            })
             ->when($request->filled('status'),          fn ($q) => $q->where('status', $request->input('status')))
             ->when($request->filled('approval_status'), fn ($q) => $q->where('approval_status', $request->input('approval_status')))
             ->when($request->filled('city'),            fn ($q) => $q->where('city', 'like', '%' . $request->input('city') . '%'))
