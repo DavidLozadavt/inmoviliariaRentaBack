@@ -29,7 +29,7 @@ class AuthController extends Controller
         $bridgeToken = env('BRIDGE_SECRET_TOKEN', 'VirtualT_Bridge_Secret_2026');
         $targets = [
             env('NEXI_API_URL', 'http://localhost:8001') . '/api/integration/sync-password',
-            env('SCHOOL_API_URL', 'http://localhost:8000') . '/api/integration/sync-password',
+            env('SCHOOL_API_URL', 'http://localhost:8003') . '/api/integration/sync-password',
         ];
 
         foreach ($targets as $url) {
