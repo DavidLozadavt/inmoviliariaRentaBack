@@ -1,4 +1,4 @@
-# 🏢 Rentus — Backend API
+# 🏢 NexiLiving — Backend API
 
 > Robust, Headless API and AI Engine built with Laravel 12, PHP 8.2, Sanctum, Reverb, and PostgreSQL/MySQL.
 
@@ -107,7 +107,7 @@ The Lyra AI ecosystem resides primarily in `app/Services/`. It functions using a
 
 **Proprietary Software — All rights reserved.**
 
-The **Rentus Backend Platform** (including the Core API, Server Architecture, Database Schema, and the entire Lyra AI Engine) is the exclusive intellectual property of its co-owners:  
+The **NexiLiving Backend Platform** (including the Core API, Server Architecture, Database Schema, and the entire Lyra AI Engine) is the exclusive intellectual property of its co-owners:  
 **Miguel Camilo** (`@miguelcamilok`), **Alexander Byrush** (`@Alexanderbyrush`) y **Jefer Mar** (`@jefermar`).
 
 Unauthorized copying, modification, distribution, or use of this project, via any medium, is strictly prohibited without explicit permission.

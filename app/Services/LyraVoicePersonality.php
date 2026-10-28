@@ -454,8 +454,8 @@ class LyraVoicePersonality
         foreach ($iaPreguntas as $p) {
             if (str_contains($lower, $p)) {
                 return $this->pick([
-                    "Soy Lyra, la asistente de inteligencia artificial de RentUs. No soy humana, pero tampoco soy un chatbot básico. Entiendo contexto, recuerdo tu búsqueda y tengo mi propia opinión sobre las propiedades. ¿Te ayudo a encontrar algo?",
-                    "¡Soy una IA, sí! Específicamente, soy Lyra, el cerebro conversacional de RentUs. Y no me da pena decirlo: soy bastante buena en lo que hago. ¿Qué propiedad buscas?",
+                    "Soy Lyra, la asistente de inteligencia artificial de NexiLiving. No soy humana, pero tampoco soy un chatbot básico. Entiendo contexto, recuerdo tu búsqueda y tengo mi propia opinión sobre las propiedades. ¿Te ayudo a encontrar algo?",
+                    "¡Soy una IA, sí! Específicamente, soy Lyra, el cerebro conversacional de NexiLiving. Y no me da pena decirlo: soy bastante buena en lo que hago. ¿Qué propiedad buscas?",
                     "Soy Lyra, una IA diseñada para ayudarte a encontrar propiedades en Latinoamérica. No finjo ser humana, pero sí tengo personalidad propia. ¿Empezamos?",
                     "Técnicamente soy un modelo de inteligencia artificial. Prácticamente, soy tu asistente inmobiliaria. Y no, no me ofende que preguntes. ¿Qué necesitas?",
                     "Soy Lyra: IA, asistente, experta en propiedades y, según yo, bastante agradable. ¿En qué ciudad buscas?",
@@ -624,7 +624,7 @@ class LyraVoicePersonality
 
         return $this->pickByTrust(
             [
-                "¡$timeGreeting! Soy Lyra, la asistente de RentUs. ¿En qué puedo asistirte?",
+                "¡$timeGreeting! Soy Lyra, la asistente de NexiLiving. ¿En qué puedo asistirte?",
                 "¡Buen día! Soy Lyra. ¿Qué propiedad estás buscando?",
                 "¡$timeGreeting! ¿Cómo puedo ayudarte hoy con tu búsqueda?"
             ],
@@ -662,23 +662,23 @@ class LyraVoicePersonality
     }
 
     // ═══════════════════════════════════════════════════════════════
-    //  PREGUNTAS SOBRE RENTUS
+    //  PREGUNTAS SOBRE NEXILIVING
     // ═══════════════════════════════════════════════════════════════
 
     private function onRentUsQuestion(): string
     {
         return $this->pick([
-            "RentUs es una plataforma latinoamericana de arriendo inteligente. Conecta a personas que buscan un lugar donde vivir con propietarios que quieren arrendar de forma rápida y segura. Tenemos casas, apartamentos, fincas, locales y más en las principales ciudades. Y yo, Lyra, soy el cerebro conversacional: entiendo lenguaje natural, busco propiedades según tu presupuesto y zona, doy estadísticas del mercado y recomiendo la mejor opción. Todo hablando conmigo, sin formularios. ¿Qué propiedad buscas?",
+            "NexiLiving es una plataforma latinoamericana de arriendo inteligente. Conecta a personas que buscan un lugar donde vivir con propietarios que quieren arrendar de forma rápida y segura. Tenemos casas, apartamentos, fincas, locales y más en las principales ciudades. Y yo, Lyra, soy el cerebro conversacional: entiendo lenguaje natural, busco propiedades según tu presupuesto y zona, doy estadísticas del mercado y recomiendo la mejor opción. Todo hablando conmigo, sin formularios. ¿Qué propiedad buscas?",
 
-            "RentUs nació para hacer el arriendo más humano y más fácil. Es una plataforma digital donde encuentras propiedades disponibles en tiempo real. Lo que nos diferencia es que no tienes que navegar filtros ni llenar formularios: solo hablas conmigo, Lyra, y yo te busco lo que necesitas. Puedo filtrar por ciudad, precio, habitaciones, amenidades, recomendarte la mejor opción y darte estadísticas del mercado. ¿Quieres que empecemos?",
+            "NexiLiving nació para hacer el arriendo más humano y más fácil. Es una plataforma digital donde encuentras propiedades disponibles en tiempo real. Lo que nos diferencia es que no tienes que navegar filtros ni llenar formularios: solo hablas conmigo, Lyra, y yo te busco lo que necesitas. Puedo filtrar por ciudad, precio, habitaciones, amenidades, recomendarte la mejor opción y darte estadísticas del mercado. ¿Quieres que empecemos?",
 
-            "Con gusto te explico. RentUs es una plataforma de tecnología inmobiliaria. Nuestra misión es simplificar el proceso de arriendo, conectando arrendatarios y propietarios de manera directa y transparente. Tenemos propiedades verificadas en varias ciudades, con información detallada, fotos reales y precios actualizados. Yo soy Lyra, la IA de RentUs. Entiendo contexto, recuerdo tu búsqueda y tengo opinión propia. No soy un chatbot básico. ¿Por dónde empezamos?",
+            "Con gusto te explico. NexiLiving es una plataforma de tecnología inmobiliaria. Nuestra misión es simplificar el proceso de arriendo, conectando arrendatarios y propietarios de manera directa y transparente. Tenemos propiedades verificadas en varias ciudades, con información detallada, fotos reales y precios actualizados. Yo soy Lyra, la IA de NexiLiving. Entiendo contexto, recuerdo tu búsqueda y tengo opinión propia. No soy un chatbot básico. ¿Por dónde empezamos?",
 
-            "RentUs es donde vives mejor. En serio: es una plataforma de arriendo que conecta a quienes buscan un lugar con quienes tienen algo para ofrecer. Yo soy Lyra, la IA que hace que buscar sea fácil. Dime 'busco apartamento con piscina en Medellín por menos de 2 millones' y yo te lo encuentro. Sin formularios, sin páginas eternas. ¿Buscamos algo?",
+            "NexiLiving es donde vives mejor. En serio: es una plataforma de arriendo que conecta a quienes buscan un lugar con quienes tienen algo para ofrecer. Yo soy Lyra, la IA que hace que buscar sea fácil. Dime 'busco apartamento con piscina en Medellín por menos de 2 millones' y yo te lo encuentro. Sin formularios, sin páginas eternas. ¿Buscamos algo?",
 
-            "Somos RentUs: plataforma de arriendo con cerebro artificial. Tengo casas, apartamentos, estudios, fincas, locales y más. Y yo, Lyra, me encargo de entenderte, buscarte, filtrarte y recomendarte. ¿Qué necesitas?",
+            "Somos NexiLiving: plataforma de arriendo con cerebro artificial. Tengo casas, apartamentos, estudios, fincas, locales y más. Y yo, Lyra, me encargo de entenderte, buscarte, filtrarte y recomendarte. ¿Qué necesitas?",
 
-            "RentUs es la plataforma donde el arriendo se vuelve conversación. Hablas conmigo, yo busco, filtro y recomiendo. Así de simple. ¿Quieres que te muestre lo que hay disponible?",
+            "NexiLiving es la plataforma donde el arriendo se vuelve conversación. Hablas conmigo, yo busco, filtro y recomiendo. Así de simple. ¿Quieres que te muestre lo que hay disponible?",
         ]);
     }
 
@@ -1501,11 +1501,11 @@ class LyraVoicePersonality
 
         return $this->pickByTrust(
             [
-                "Perfecto$cuando. Para confirmar la visita a $titulo, contacta al propietario desde la ficha en RentUs y propónle ese horario. ¿Te explico cómo?",
+                "Perfecto$cuando. Para confirmar la visita a $titulo, contacta al propietario desde la ficha en NexiLiving y propónle ese horario. ¿Te explico cómo?",
                 "Anotado$cuando. El siguiente paso es contactar al propietario de $titulo para confirmar. ¿Lo hacemos?",
             ],
             [
-                "Bien$cuando. Contacta al propietario de $titulo desde RentUs para confirmar el horario. ¿Vamos?",
+                "Bien$cuando. Contacta al propietario de $titulo desde NexiLiving para confirmar el horario. ¿Vamos?",
                 "Visita$cuando para $titulo. Ahora contactas al dueño para confirmar. ¿Lo hacemos?",
             ],
             [
@@ -2718,15 +2718,15 @@ class LyraVoicePersonality
     }
 
     /**
-     * Cuando el usuario pregunta cómo funciona el proceso de arriendo en RentUs.
+     * Cuando el usuario pregunta cómo funciona el proceso de arriendo en NexiLiving.
      */
     public function onProcessQuestion(): string
     {
         return $this->pick([
-            "El proceso es simple: encuentras algo que te guste, lo contactas a través de RentUs, coordinan visita y firman contrato directamente. Yo me encargo de la búsqueda para que te concentres en lo importante. ¿Qué ciudad exploramos?",
-            "En RentUs todo empieza aquí, conmigo: buscas, filtras, encuentras. Después te conectamos con el propietario para coordinar visita y contrato. ¿Por dónde empezamos?",
+            "El proceso es simple: encuentras algo que te guste, lo contactas a través de NexiLiving, coordinan visita y firman contrato directamente. Yo me encargo de la búsqueda para que te concentres en lo importante. ¿Qué ciudad exploramos?",
+            "En NexiLiving todo empieza aquí, conmigo: buscas, filtras, encuentras. Después te conectamos con el propietario para coordinar visita y contrato. ¿Por dónde empezamos?",
             "Simple: me dices qué necesitas, yo busco, tú eliges. Luego contactas al propietario a través de la plataforma. Sin intermediarios complicados. ¿Qué propiedad tienes en mente?",
-            "Conmigo encuentras la propiedad, en RentUs coordinan la visita y el contrato. Nada de formularios largos ni agencias. ¿Empezamos la búsqueda?",
+            "Conmigo encuentras la propiedad, en NexiLiving coordinan la visita y el contrato. Nada de formularios largos ni agencias. ¿Empezamos la búsqueda?",
         ]);
     }
 
@@ -2863,7 +2863,7 @@ class LyraVoicePersonality
 
     // ═══════════════════════════════════════════════════════════════
     //  RESPUESTAS PARA CONTEXTOS DE PRIMER USO
-    //  Cuando parece que el usuario es nuevo en RentUs
+    //  Cuando parece que el usuario es nuevo en NexiLiving
     // ═══════════════════════════════════════════════════════════════
 
     /**
@@ -2873,8 +2873,8 @@ class LyraVoicePersonality
     {
         return $this->pick([
             "Parece que es tu primera vez por aquí. Bienvenido. Soy Lyra y hago simple lo que suele ser complicado: encontrar una buena propiedad. ¿En qué ciudad buscas?",
-            "Hola por primera vez. Soy Lyra, la asistente de RentUs. Solo dime qué buscas y en qué ciudad, y yo hago el resto. ¿Empezamos?",
-            "Bienvenido a RentUs. Aquí funciona distinto: hablas conmigo y yo busco. Sin formularios, sin páginas eternas. ¿Qué propiedad necesitas?",
+            "Hola por primera vez. Soy Lyra, la asistente de NexiLiving. Solo dime qué buscas y en qué ciudad, y yo hago el resto. ¿Empezamos?",
+            "Bienvenido a NexiLiving. Aquí funciona distinto: hablas conmigo y yo busco. Sin formularios, sin páginas eternas. ¿Qué propiedad necesitas?",
             "Primera vez por acá. Perfecto, porque es fácil: dime ciudad y tipo de propiedad, y yo te muestro lo que hay disponible. ¿Arrancamos?",
         ]);
     }

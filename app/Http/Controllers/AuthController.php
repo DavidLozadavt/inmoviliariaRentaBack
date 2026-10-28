@@ -21,7 +21,7 @@ class AuthController extends Controller
 {
     /**
      * Propaga el nuevo hash de contraseña a nexiservice y School cuando el
-     * usuario la cambia en RentUs. Fire-and-forget: si un destino falla, no
+     * usuario la cambia en NexiLiving. Fire-and-forget: si un destino falla, no
      * rompe el cambio de contraseña local.
      */
     private function syncPasswordToSiblings(string $email, string $hash): void

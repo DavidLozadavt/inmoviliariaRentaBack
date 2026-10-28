@@ -77,7 +77,7 @@ class RentUsBridgeController extends Controller
                     'id_documento' => $request->id_documento,
                     'email_verified_at' => $existente->email_verified_at ?? now(),
                 ];
-                // Un administrador de RentUs no se convierte en arrendador.
+                // Un administrador de NexiLiving no se convierte en arrendador.
                 if ($existente->role !== 'admin') {
                     $cambios['role'] = 'landlord';
                 }
@@ -114,7 +114,7 @@ class RentUsBridgeController extends Controller
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
-            return response()->json(['error' => 'Ocurrió un error en el servidor de RentUs: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Ocurrió un error en el servidor de NexiLiving: ' . $e->getMessage()], 500);
         }
     }
 

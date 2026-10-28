@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class LyraContextService
 {
     /**
-     * Get real-time context from RentUs database to train Lyra.
+     * Get real-time context from NexiLiving database to train Lyra.
      * Cached for 1 hour to avoid hammering the DB on every request.
      */
     public function getContext(): array
@@ -29,7 +29,7 @@ class LyraContextService
     }
 
     /**
-     * RentUs property types.
+     * NexiLiving property types.
      * The properties table doesn't have a 'type' column — types are embedded in titles.
      */
     private function getPropertyTypes(): array

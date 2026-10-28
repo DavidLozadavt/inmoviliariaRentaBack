@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
 
         // Usuario fijo para pruebas
         User::factory()->create([
-            "name" => "Administrador Rentus",
+            "name" => "Administrador NexiLiving",
             "email" => "admin@rentus.com",
             "password" => bcrypt("password"),
             "status" => "active",

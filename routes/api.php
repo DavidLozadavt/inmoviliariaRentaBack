@@ -47,7 +47,7 @@ Route::prefix('properties')->group(function () {
 // Proxy de Geocoding (Evita CORS en producción)
 Route::get('geocoding/search', [\App\Http\Controllers\GeocodingController::class, 'search']);
 
-// Lyra Cognitive System (Brain of RentUs)
+// Lyra Cognitive System (Brain of NexiLiving)
 Route::prefix('lyra')->middleware('throttle:120,1')->group(function () {
     Route::post('interpret', [\App\Http\Controllers\LyraController::class, 'interpret']);
     Route::post('execute', [\App\Http\Controllers\LyraController::class, 'execute']);
@@ -62,7 +62,7 @@ Route::post('voice/interpret', [\App\Http\Controllers\VoiceController::class, 'i
 // Luma NO provee firma HMAC — ver LumaWebhookController para detalles
 Route::post('webhooks/luma', [LumaWebhookController::class, 'handle']);
 
-// Puente de integración ERP → RentUs (público, protegido por X-Bridge-Token)
+// Puente de integración ERP → NexiLiving (público, protegido por X-Bridge-Token)
 Route::post('integration/inscribe-inmobiliaria', [\App\Http\Controllers\RentUsBridgeController::class, 'inscribirInmobiliaria']);
 Route::post('integration/sync-password', [\App\Http\Controllers\RentUsBridgeController::class, 'syncPassword']);
 

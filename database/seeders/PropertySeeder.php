@@ -15,7 +15,7 @@ class PropertySeeder extends Seeder
         Property::query()->forceDelete();
 
         $user = User::first() ?? User::factory()->create([
-            'name' => 'Agente RentUs',
+            'name' => 'Agente NexiLiving',
             'email' => 'agente@rentus.com',
             'password' => bcrypt('password'),
         ]);

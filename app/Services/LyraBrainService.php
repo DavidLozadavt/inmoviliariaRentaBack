@@ -804,7 +804,7 @@ class LyraBrainService
 
         if ($askedPrice !== null && $minPriceDb > 0 && $askedPrice < $minPriceDb) {
             $formattedMin = number_format($minPriceDb / 1000000, 1, ',', '.');
-            $msg          = "Las propiedades en RentUs arrancan desde {$formattedMin} millones. ¿Quisiste decir eso?";
+            $msg          = "Las propiedades en NexiLiving arrancan desde {$formattedMin} millones. ¿Quisiste decir eso?";
             $this->storeHistory($historyKey, $history, $text, $msg);
             return $this->buildResponse($msg, [], null, $this->extractFilters($mergedIntent), $mergedIntent, true, $msg);
         }
@@ -1621,7 +1621,7 @@ class LyraBrainService
     ): array {
         if (!empty($intent['has_unknown_entity']) && $intent['has_unknown_entity'] === true) {
             $ent = $intent['unknown_entity_name'] ?? 'esa ubicación';
-            $msg = "No reconozco '{$ent}' como una ciudad o plataforma en nuestra base de datos. ¿Te refieres a alguna ciudad en Colombia o quieres saber las estadísticas generales de RentUs?";
+            $msg = "No reconozco '{$ent}' como una ciudad o plataforma en nuestra base de datos. ¿Te refieres a alguna ciudad en Colombia o quieres saber las estadísticas generales de NexiLiving?";
             $this->storeHistory($historyKey, $history, $text, $msg);
             $intent['needs_clarification'] = true;
             $intent['clarification_question'] = $msg;
@@ -1693,7 +1693,7 @@ class LyraBrainService
         foreach ($cities as $c => $cnt) $cityLines[] = "{$c} ({$cnt})";
         $cityStr = implode(', ', $cityLines);
 
-        $rawText = "En total RentUs tiene **{$total} propiedades activas**. "
+        $rawText = "En total NexiLiving tiene **{$total} propiedades activas**. "
             . "El precio promedio general es de **" . $this->formatPriceText($avg) . "**, "
             . "con opciones desde " . $this->formatPriceText($min) . " hasta " . $this->formatPriceText($max) . ". "
             . "Las ciudades con más oferta son: {$cityStr}.";
@@ -2365,9 +2365,9 @@ class LyraBrainService
     private function getDefaultResponse(string $intentType): string
     {
         return match ($intentType) {
-            'saludo'            => '¡Hola! Soy Lyra, tu asistente inmobiliaria en RentUs. ¿En qué ciudad buscas y qué tipo de propiedad necesitas?',
-            'preguntar_rentus'  => 'RentUs es una plataforma inmobiliaria latinoamericana donde puedes buscar casas, apartamentos, locales y más. ¿Qué tipo de propiedad buscas?',
-            default             => 'Solo puedo ayudarte con temas inmobiliarios y de RentUs. ¿Buscas alguna propiedad en particular?',
+            'saludo'            => '¡Hola! Soy Lyra, tu asistente inmobiliaria en NexiLiving. ¿En qué ciudad buscas y qué tipo de propiedad necesitas?',
+            'preguntar_rentus'  => 'NexiLiving es una plataforma inmobiliaria latinoamericana donde puedes buscar casas, apartamentos, locales y más. ¿Qué tipo de propiedad buscas?',
+            default             => 'Solo puedo ayudarte con temas inmobiliarios y de NexiLiving. ¿Buscas alguna propiedad en particular?',
         };
     }
 

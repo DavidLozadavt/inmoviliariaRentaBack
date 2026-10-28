@@ -15,7 +15,7 @@ class PaymentSimulationSeeder extends Seeder
 
         if (!$admin) {
             $admin = User::create([
-                "name" => "Administrador Rentus",
+                "name" => "Administrador NexiLiving",
                 "email" => "admin@rentus.com",
                 "password" => bcrypt("password"),
                 "status" => "active",

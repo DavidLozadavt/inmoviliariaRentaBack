@@ -1415,7 +1415,7 @@ class LocalInterpreterEngine
             return $this->buildIntent('consulta_analitica', ['response_text' => '']);
         }
 
-        // ══ 10. Preguntar RentUs ══
+        // ══ 10. Preguntar NexiLiving ══
         if ($this->isRentUsQuestion($normalized)) {
             return $this->buildIntent('preguntar_rentus', ['response_text' => '']);
         }
@@ -2475,7 +2475,10 @@ class LocalInterpreterEngine
 
     private function normalize(string $text): string
     {
-        return mb_strtolower(trim($this->normalizeTypos($text)));
+        $texto = mb_strtolower(trim($this->normalizeTypos($text)));
+
+        // La plataforma ahora se llama NexiLiving; los patrones siguen escritos con "rentus".
+        return preg_replace('/\bnexi[\s-]?living\b/u', 'rentus', $texto);
     }
 
     private function normalizeTypos(string $text): string
