@@ -32,4 +32,12 @@ return [
 
     // Google Gemini AI (Voice Assistant)
 
+    // Puente con la pasarela de NexiService, School y el ERP (cabecera X-Bridge-Token).
+    // Se lee aqui y no con env() en los controladores: con config:cache env() devuelve null.
+    'bridge' => [
+        'token' => env('BRIDGE_SECRET_TOKEN', 'VirtualT_Bridge_Secret_2026'),
+        'nexi_url' => env('NEXI_API_URL', 'http://127.0.0.1:8001'),
+        'school_url' => env('SCHOOL_API_URL', 'http://127.0.0.1:8006'),
+    ],
+
 ];

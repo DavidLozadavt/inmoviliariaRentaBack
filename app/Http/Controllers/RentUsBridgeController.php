@@ -21,7 +21,7 @@ class RentUsBridgeController extends Controller
     public function inscribirInmobiliaria(Request $request): JsonResponse
     {
         $receivedToken = $request->header('X-Bridge-Token');
-        $expectedToken = env('BRIDGE_SECRET_TOKEN', 'VirtualT_Bridge_Secret_2026');
+        $expectedToken = config('services.bridge.token');
 
         if (empty($receivedToken) || $receivedToken !== $expectedToken) {
             return response()->json(['error' => 'No autorizado. Token de seguridad inválido o ausente.'], 401);
@@ -40,42 +40,63 @@ class RentUsBridgeController extends Controller
             'photo' => 'nullable|string',
         ]);
 
-        if (User::where('id_documento', $request->id_documento)->exists()) {
-            return response()->json(['error' => 'Ya existe una inmobiliaria registrada con este documento.'], 422);
-        }
-
-        if (User::where('email', $request->email)->exists()) {
-            return response()->json(['error' => 'El correo electrónico ya se encuentra registrado en el sistema.'], 422);
-        }
+        $datos = [
+            'name' => $request->nombre,
+            'phone' => $request->telefono ?: null,
+            'address' => $request->direccion ?? 'No especificada',
+            'status' => 'active',
+            'verification_status' => 'verified',
+            'city' => $request->ciudad,
+            'department' => $request->departamento,
+            'bio' => $request->bio,
+            'photo' => $request->photo,
+            'updated_at' => now(),
+        ];
 
         try {
             DB::beginTransaction();
 
+            // Igual que inscribe-empresa del ERP business: se busca por correo y,
+            // si ya existe, se actualiza (así se puede reintentar sin error).
+            $existente = User::where('email', $request->email)->first();
+
+            // El documento ya lo usa otra cuenta (otro correo): no se mezclan.
+            $documentoOcupado = User::where('id_documento', $request->id_documento)
+                ->when($existente, fn ($q) => $q->where('id', '!=', $existente->id))
+                ->exists();
+            if ($documentoOcupado) {
+                DB::rollBack();
+                return response()->json(['error' => 'Ya existe otra cuenta registrada con este documento.'], 422);
+            }
+
             $tempPassword = 'VirtualT2026!';
-            $password = $request->filled('contrasena_hash')
-                ? $request->contrasena_hash // Ya viene encriptada del ERP
-                : Hash::make($tempPassword);
+            $conClaveNexi = $request->filled('contrasena_hash');
 
-            $phone = $request->telefono ?: ('sin-telefono-' . uniqid());
-
-            $userId = DB::table('users')->insertGetId([
-                'name' => $request->nombre,
-                'email' => $request->email,
-                'password' => $password,
-                'phone' => $phone,
-                'address' => $request->direccion ?? 'No especificada',
-                'id_documento' => $request->id_documento,
-                'status' => 'active',
-                'verification_status' => 'verified',
-                'email_verified_at' => now(),
-                'role' => 'landlord',
-                'city' => $request->ciudad,
-                'department' => $request->departamento,
-                'bio' => $request->bio,
-                'photo' => $request->photo,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            if ($existente) {
+                $cambios = array_filter($datos, fn ($v) => $v !== null) + [
+                    'id_documento' => $request->id_documento,
+                    'email_verified_at' => $existente->email_verified_at ?? now(),
+                ];
+                // Un administrador de RentUs no se convierte en arrendador.
+                if ($existente->role !== 'admin') {
+                    $cambios['role'] = 'landlord';
+                }
+                if ($conClaveNexi) {
+                    $cambios['password'] = $request->contrasena_hash;
+                }
+                DB::table('users')->where('id', $existente->id)->update($cambios);
+                $userId = $existente->id;
+            } else {
+                $userId = DB::table('users')->insertGetId([
+                    'email' => $request->email,
+                    'password' => $conClaveNexi ? $request->contrasena_hash : Hash::make($tempPassword),
+                    'phone' => $request->telefono ?: ('sin-telefono-' . uniqid()),
+                    'id_documento' => $request->id_documento,
+                    'email_verified_at' => now(),
+                    'role' => 'landlord',
+                    'created_at' => now(),
+                ] + $datos);
+            }
 
             DB::commit();
 
@@ -84,7 +105,7 @@ class RentUsBridgeController extends Controller
             return response()->json([
                 'message' => 'Inmobiliaria registrada con éxito.',
                 'user_id' => $userId,
-                'temp_password' => $request->filled('contrasena_hash') ? null : $tempPassword,
+                'temp_password' => (!$existente && !$conClaveNexi) ? $tempPassword : null,
             ], 201);
 
         } catch (\Exception $e) {
@@ -104,7 +125,7 @@ class RentUsBridgeController extends Controller
     public function syncPassword(Request $request): JsonResponse
     {
         $receivedToken = $request->header('X-Bridge-Token');
-        $expectedToken = env('BRIDGE_SECRET_TOKEN', 'VirtualT_Bridge_Secret_2026');
+        $expectedToken = config('services.bridge.token');
 
         if (empty($receivedToken) || $receivedToken !== $expectedToken) {
             return response()->json(['error' => 'No autorizado.'], 401);

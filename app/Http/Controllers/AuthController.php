@@ -26,10 +26,10 @@ class AuthController extends Controller
      */
     private function syncPasswordToSiblings(string $email, string $hash): void
     {
-        $bridgeToken = env('BRIDGE_SECRET_TOKEN', 'VirtualT_Bridge_Secret_2026');
+        $bridgeToken = config('services.bridge.token');
         $targets = [
-            env('NEXI_API_URL', 'http://localhost:8001') . '/api/integration/sync-password',
-            env('SCHOOL_API_URL', 'http://localhost:8003') . '/api/integration/sync-password',
+            rtrim((string) config('services.bridge.nexi_url'), '/') . '/api/integration/sync-password',
+            rtrim((string) config('services.bridge.school_url'), '/') . '/api/integration/sync-password',
         ];
 
         foreach ($targets as $url) {
