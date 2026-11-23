@@ -33,6 +33,12 @@ class Property extends Model
         'lat',
         'lng',
         'accuracy',
+        'building_id',
+        'unit_type_id',
+        'tower',
+        'floor',
+        'unit_code',
+        'commercial_status',
     ];
 
     protected $casts = [
@@ -84,6 +90,21 @@ class Property extends Model
     public function threeDModel()
     {
         return $this->hasOne(Property3dModel::class);
+    }
+
+    public function building()
+    {
+        return $this->belongsTo(Building::class);
+    }
+
+    public function unitType()
+    {
+        return $this->belongsTo(UnitType::class);
+    }
+
+    public function panoramas()
+    {
+        return $this->morphMany(Panorama::class, 'owner')->orderBy('order');
     }
 
     public function captureSessions()
