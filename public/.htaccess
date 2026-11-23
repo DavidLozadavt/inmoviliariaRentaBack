@@ -23,3 +23,13 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# ── Visor 3D: fotos 360° con nombre aleatorio (nunca se sobrescriben) → caché larga en navegador y Cloudflare
+<IfModule mod_headers.c>
+    <If "%{REQUEST_URI} =~ m#/storage/visor3d/#">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+        # El visor 360° descarga la foto con fetch desde el dominio del front
+        Header set Access-Control-Allow-Origin "*"
+        Header unset Set-Cookie
+    </If>
+</IfModule>
