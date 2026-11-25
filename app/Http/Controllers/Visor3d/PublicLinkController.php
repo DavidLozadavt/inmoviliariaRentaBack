@@ -87,7 +87,7 @@ class PublicLinkController extends Controller
         return (string) parse_url($url, PHP_URL_QUERY);
     }
 
-    private function linkData(Building $building, ?string $query): array
+    public function linkData(Building $building, ?string $query): array
     {
         if (! $building->public_token) {
             return ['active' => false];

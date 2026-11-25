@@ -66,6 +66,8 @@ Route::post('webhooks/luma', [LumaWebhookController::class, 'handle']);
 
 // Puente de integración ERP → NexiLiving (público, protegido por X-Bridge-Token)
 Route::post('integration/inscribe-inmobiliaria', [\App\Http\Controllers\RentUsBridgeController::class, 'inscribirInmobiliaria']);
+// Edificio 3D creado desde NexiLiving Business (ERP virtualt). Idempotente por erp_ref.
+Route::middleware('throttle:60,1')->post('integration/edificios', [\App\Http\Controllers\Visor3d\ErpEdificioBridgeController::class, 'sincronizar']);
 Route::post('integration/sync-password', [\App\Http\Controllers\RentUsBridgeController::class, 'syncPassword']);
 
 /*
