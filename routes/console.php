@@ -20,3 +20,6 @@ Schedule::call(function () {
         ->where('created_at', '<', now()->subDays(7))
         ->delete();
 })->weekly()->sundays()->at('03:00');
+
+// Visor 3D: fotos 360° sin fila en panoramas (subidas interrumpidas, borrados). Semanal.
+Schedule::command('visor3d:limpiar-huerfanos')->weekly()->sundays()->at('03:30');

@@ -41,6 +41,8 @@ Route::prefix('properties')->group(function () {
     Route::get('/', [PropertyController::class, 'index']);
     Route::get('count', [PropertyController::class, 'count']);
     Route::get('{property}', [PropertyController::class, 'show']);
+    Route::get('{property}/visor3d', [\App\Http\Controllers\Visor3d\PropertyVisorController::class, 'show'])
+        ->middleware('visor3d.cache:public');
     Route::post('{id}/views', [PropertyController::class, 'incrementViews']);
 });
 
@@ -64,6 +66,8 @@ Route::post('webhooks/luma', [LumaWebhookController::class, 'handle']);
 
 // Puente de integración ERP → NexiLiving (público, protegido por X-Bridge-Token)
 Route::post('integration/inscribe-inmobiliaria', [\App\Http\Controllers\RentUsBridgeController::class, 'inscribirInmobiliaria']);
+// Edificio 3D creado desde NexiLiving Business (ERP virtualt). Idempotente por erp_ref.
+Route::middleware('throttle:60,1')->post('integration/edificios', [\App\Http\Controllers\Visor3d\ErpEdificioBridgeController::class, 'sincronizar']);
 Route::post('integration/sync-password', [\App\Http\Controllers\RentUsBridgeController::class, 'syncPassword']);
 
 /*
@@ -88,6 +92,12 @@ Route::prefix('auth')->middleware('throttle:10,1')->group(function () {
 |*/
 // Debug & Storage Testing
 Route::post('/test-upload', [\App\Http\Controllers\FileUploadController::class, 'upload'])->middleware('auth:api');
+
+// ── Visor 3D público (enlace firmado, sin login, solo datos comerciales) ──
+Route::get('public/buildings/{token}', [\App\Http\Controllers\Visor3d\PublicLinkController::class, 'publicView'])
+    ->name('visor3d.public')
+    ->where('token', '[A-Za-z0-9]{40}')
+    ->middleware(['throttle:120,1', 'visor3d.cache:public']);
 
 Route::middleware('auth:api')->group(function () {
 
@@ -122,6 +132,52 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('{property}', [PropertyController::class, 'destroy']);
         Route::post('{id}/save-point', [PropertyController::class, 'savePoint']);
         Route::get('{property}/3d-status', [ModelStatusController::class, 'show']);
+    });
+
+    // ── Visor 3D de edificios ────────────────────
+    Route::prefix('buildings')->middleware('visor3d.cache')->group(function () {
+        $b = \App\Http\Controllers\Visor3d\BuildingController::class;
+        $u = \App\Http\Controllers\Visor3d\UnitController::class;
+        $p = \App\Http\Controllers\Visor3d\PanoramaController::class;
+        $l = \App\Http\Controllers\Visor3d\PublicLinkController::class;
+
+        Route::get('/', [$b, 'index']);
+        Route::post('/', [$b, 'store']);
+        Route::get('{building}/config', [$b, 'config']);
+        Route::put('{building}', [$b, 'update']);
+        Route::delete('{building}', [$b, 'destroy']);
+
+        Route::post('{building}/units/generate', [$u, 'generate']);
+        Route::post('{building}/units/link', [$u, 'link']);
+        Route::get('{building}/units/available', [$u, 'available']);
+        Route::put('{building}/units/{unit}', [$u, 'update']);
+        Route::delete('{building}/units/{unit}', [$u, 'unlink']);
+        Route::put('{building}/units/{unit}/move', [$u, 'move']);
+        Route::delete('{building}/units/{unit}/destroy', [$u, 'destroy']);
+        Route::get('{building}/units/{unit}/tour', [$u, 'tour']);
+
+        Route::get('{building}/panoramas', [$p, 'index']);
+        Route::post('{building}/panoramas', [$p, 'store'])->middleware('throttle:30,1');
+        Route::put('{building}/panoramas/{panorama}', [$p, 'update']);
+        Route::put('{building}/panoramas/{panorama}/hotspots', [$p, 'hotspots']);
+        Route::delete('{building}/panoramas/{panorama}', [$p, 'destroy']);
+
+        $m = \App\Http\Controllers\Visor3d\BuildingMediaController::class;
+        $kinds = ['cover', 'preview', 'facade_front', 'facade_side', 'facade_left', 'facade_back', 'roof', 'site_plan'];
+        Route::post('{building}/media/{kind}', [$m, 'store'])->whereIn('kind', $kinds)->middleware('throttle:30,1');
+        Route::delete('{building}/media/{kind}', [$m, 'destroy'])->whereIn('kind', $kinds);
+
+        $tm = \App\Http\Controllers\Visor3d\TowerMediaController::class;
+        Route::post('{building}/towers/{tower}/media/{kind}', [$tm, 'store'])
+            ->whereIn('kind', \App\Http\Controllers\Visor3d\TowerMediaController::KINDS)->middleware('throttle:30,1');
+        Route::delete('{building}/towers/{tower}/media/{kind}', [$tm, 'destroy'])
+            ->whereIn('kind', \App\Http\Controllers\Visor3d\TowerMediaController::KINDS);
+
+        Route::put('{building}/plans', [\App\Http\Controllers\Visor3d\UnitPlanController::class, 'update']);
+
+        Route::get('{building}/public-link', [$l, 'show']);
+        Route::post('{building}/public-link', [$l, 'store']);
+        Route::delete('{building}/public-link', [$l, 'destroy']);
     });
 
     // ── Sesiones de captura 3D ───────────────────

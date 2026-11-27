@@ -1,0 +1,87 @@
+{
+  "living": {
+    "space": "Living",
+    "links": [
+      {
+        "target": "cocina",
+        "label": "Cocina",
+        "yaw": -1.3102,
+        "pitch": -0.1597
+      },
+      {
+        "target": "habitacion",
+        "label": "Habitación",
+        "yaw": 1.3734,
+        "pitch": -0.162
+      },
+      {
+        "target": "comedor",
+        "label": "Comedor",
+        "yaw": -2.6941,
+        "pitch": -0.1784
+      }
+    ]
+  },
+  "comedor": {
+    "space": "Comedor",
+    "links": [
+      {
+        "target": "living",
+        "label": "Living",
+        "yaw": 0.0,
+        "pitch": -0.245
+      },
+      {
+        "target": "cocina",
+        "label": "Cocina",
+        "yaw": -1.2793,
+        "pitch": -0.235
+      }
+    ]
+  },
+  "cocina": {
+    "space": "Cocina",
+    "links": [
+      {
+        "target": "living",
+        "label": "Living",
+        "yaw": 1.5708,
+        "pitch": -0.2709
+      },
+      {
+        "target": "comedor",
+        "label": "Comedor",
+        "yaw": -0.3393,
+        "pitch": -0.2705
+      }
+    ]
+  },
+  "habitacion": {
+    "space": "Habitación",
+    "links": [
+      {
+        "target": "living",
+        "label": "Living",
+        "yaw": -1.8158,
+        "pitch": -0.2379
+      },
+      {
+        "target": "bano",
+        "label": "Baño",
+        "yaw": -2.6992,
+        "pitch": -0.2335
+      }
+    ]
+  },
+  "bano": {
+    "space": "Baño",
+    "links": [
+      {
+        "target": "habitacion",
+        "label": "Habitación",
+        "yaw": 0.2663,
+        "pitch": -0.4133
+      }
+    ]
+  }
+}

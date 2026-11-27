@@ -21,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Registrar alias de middleware
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'visor3d.cache' => \App\Http\Middleware\Visor3dCacheHeaders::class,
         ]);
 
         // CORS para la API
