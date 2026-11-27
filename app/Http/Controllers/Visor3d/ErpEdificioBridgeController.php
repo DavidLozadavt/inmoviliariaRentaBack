@@ -12,6 +12,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use App\Services\Visor3d\PanoramaService;
 
 /**
  * Puente ERP → NexiLiving: el proyecto vertical configurado en NexiLiving Business
@@ -67,6 +69,7 @@ class ErpEdificioBridgeController extends Controller
             return [$building, $creado];
         });
 
+        $this->portada($building, $request->input('cover'));
         $generado = $generador->generate($building);
 
         $sinPosicion = [];
@@ -99,6 +102,34 @@ class ErpEdificioBridgeController extends Controller
             'visor_url'    => $enlace['url'] ?? null,
             'embed_url'    => $enlace['embed_url'] ?? null,
         ], $creado ? 201 : 200);
+    }
+
+    /**
+     * Portada que llega del ERP. Solo se guarda si cambió (por nombre) y no pisa
+     * una foto subida a mano en NexiLiving.
+     */
+    private function portada(Building $building, ?array $cover): void
+    {
+        $config = $building->config ?? [];
+        $previa = $config['erp_cover'] ?? null;
+        if (! $cover || $previa === $cover['nombre'] || ($building->cover_path && ! $previa)) {
+            return;
+        }
+        $bytes = base64_decode($cover['contenido'], true);
+        $ext = $bytes ? match ((new \finfo(FILEINFO_MIME_TYPE))->buffer($bytes)) {
+            'image/webp' => 'webp', 'image/png' => 'png', 'image/jpeg' => 'jpg', default => null,
+        } : null;
+        if (! $ext) {
+            return;
+        }
+        $disk = Storage::disk(PanoramaService::DISK);
+        $path = PanoramaService::DIR . '/' . $building->id . '/cover-erp-' . Str::random(20) . ".$ext";
+        $disk->put($path, $bytes);
+        if ($building->cover_path) {
+            $disk->delete($building->cover_path);
+        }
+        $config['erp_cover'] = $cover['nombre'];
+        $building->forceFill(['cover_path' => $path, 'config' => $config])->save();
     }
 
     /** El dueño es la inmobiliaria: se busca por correo o documento; si no existe se crea sin clave usable. */

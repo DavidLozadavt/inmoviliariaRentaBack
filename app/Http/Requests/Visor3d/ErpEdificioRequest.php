@@ -34,6 +34,10 @@ class ErpEdificioRequest extends BuildingRequest
             'unidades.*.estado'       => ['required', 'in:disponible,reservado,vendido'],
             'unidades.*.precio'       => ['nullable', 'numeric', 'min:0'],
             'unidades.*.publicado'    => ['boolean'],
+            // Foto de portada del proyecto en el ERP (base64, ~10 MB de imagen como máximo).
+            'cover'                   => ['nullable', 'array'],
+            'cover.nombre'            => ['required_with:cover', 'string', 'max:255'],
+            'cover.contenido'         => ['required_with:cover', 'string', 'max:14000000'],
         ];
     }
 }
